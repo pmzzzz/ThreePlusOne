@@ -51,14 +51,13 @@ class MyFile(MyFileCreate):
     """
     文件
     """
-    fid: Optional[str] = None
+    fid: Optional[int] = None
 
 
-class MyCourse(BaseModel):
+class MyCourseCreate(BaseModel):
     """
     课程
     """
-    cid: str
     name: str  # 不可重复
     description: Optional[str] = None
     labels: List[int] = []  # 标签id
@@ -70,10 +69,23 @@ class MyCourse(BaseModel):
     course_type: CourseType
 
 
-class MyLabel(BaseModel):
+class MyCourse(MyCourseCreate):
+    """
+    课程
+    """
+    cid: Optional[int] = None
+
+
+class MyLabelCreate(BaseModel):
     """
     标签
     """
-    lid: int
     label_type: str
     value: str
+
+
+class MyLabel(MyLabelCreate):
+    """
+    标签
+    """
+    lid: Optional[int] = None

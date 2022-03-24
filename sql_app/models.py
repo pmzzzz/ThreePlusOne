@@ -24,8 +24,8 @@ class MyCourse(Base):
     fields = Column(String(128))
     duration = Column(Integer)
     content = Column(String(128))
-    file_id = Column(String(128))
-    isComplete = Column(Boolean)
+    file_id = Column(Integer)
+    is_complete = Column(Boolean)
     course_type = Column(String(128))
 
 

@@ -50,7 +50,7 @@ def delete_file(db: Session, fid: int):
 
 
 # ==============课程====================
-def create_course(db: Session, my_course: schemas.MyCourse):
+def create_course(db: Session, my_course: schemas.MyCourseCreate):
     name = my_course.name
     description = my_course.description
     labels = json.dumps(my_course.labels)
@@ -99,7 +99,7 @@ def delete_course(db: Session, cid: int):
 
 
 # ==============标签====================
-def create_label(db: Session, my_label: schemas.MyLabel):
+def create_label(db: Session, my_label: schemas.MyLabelCreate):
     label_type = my_label.label_type
     value = my_label.value
 
