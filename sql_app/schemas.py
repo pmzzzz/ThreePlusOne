@@ -15,6 +15,12 @@ class AllObject(str, Enum):
     file = "file"
     course = "course"
     label = "label"
+    user = "user"
+    field = "field"
+    job = "job"
+    course_field = "course_field"
+    course_job = "course_job"
+
 
 
 class FileType(str, Enum):
@@ -39,29 +45,30 @@ class CourseType(str, Enum):
 
 
 class MyFileCreate(BaseModel):
-    name: str
-    description: Optional[str] = None
+    file_name: str
+    file_description: Optional[str] = None
     file_type: FileType = FileType.other
-    labels: List[int] = []  # 标签的id
+    file_labels: List[int] = []  # 标签的id
     duration: int
-    path: Optional[str] = None
+    file_path: Optional[str] = None
 
 
 class MyFile(MyFileCreate):
     """
     文件
     """
-    fid: Optional[int] = None
+    id: Optional[int] = None
 
 
 class MyCourseCreate(BaseModel):
     """
     课程
     """
-    name: str  # 不可重复
-    description: Optional[str] = None
-    labels: List[int] = []  # 标签id
-    fields: List[str] = []
+    course_name: str  # 不可重复
+    course_description: Optional[str] = None
+    course_labels: List[int] = []  # 标签id
+    course_fields: List[str] = []
+    course_jobs: List[str] = []
     duration: Optional[int] = None
     content: List[int] = []  # 课程id
     file_id: Optional[int] = None  # 文件id
@@ -73,7 +80,7 @@ class MyCourse(MyCourseCreate):
     """
     课程
     """
-    cid: Optional[int] = None
+    id: Optional[int] = None
 
 
 class MyLabelCreate(BaseModel):
@@ -88,4 +95,50 @@ class MyLabel(MyLabelCreate):
     """
     标签
     """
-    lid: Optional[int] = None
+    id: Optional[int] = None
+
+
+
+
+
+
+class MyJobCreate(BaseModel):
+    """
+    工作
+    """
+    job_name: str
+    job_description: Optional[str] = None
+
+
+class MyJob(MyJobCreate):
+    """
+    工作
+    """
+    id: Optional[int] = None
+
+
+class MyFieldCreate(BaseModel):
+    field_name: str
+    field_description: Optional[str] = None
+
+
+class MyField(MyFieldCreate):
+    id: int
+
+
+class MyCourseFieldCreate(BaseModel):
+    course_id: int
+    field_id: int
+
+
+class MyCourseField(MyCourseFieldCreate):
+    id: int
+
+
+class MyCourseJobCreate(BaseModel):
+    course_id: int
+    job_id: int
+
+
+class MyCourseJob(MyCourseJobCreate):
+    id: int

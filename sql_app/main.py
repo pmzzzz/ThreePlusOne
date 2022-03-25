@@ -40,7 +40,7 @@ def create_file(my_file: schemas.MyFileCreate,
                 db: Session = Depends(get_db)
                 ):
     file = crud.create_file(db, my_file)
-    return {'fid':file.fid}
+    return {'id': file.fid}
 
 
 @app.post('/create/course', description="创建课程")
@@ -48,7 +48,7 @@ def create_course(my_course: schemas.MyCourseCreate,
                   db: Session = Depends(get_db)
                   ):
     course = crud.create_course(db, my_course)
-    return {'cid':course.cid,}
+    return {'id': course.id}
 
 
 @app.post('/create/label', description="创建标签")
@@ -56,7 +56,35 @@ def create_label(my_label: schemas.MyLabelCreate,
                  db: Session = Depends(get_db)
                  ):
     label = crud.create_label(db, my_label)
-    return {'lid':label.lid}
+    return {'id': label.id}
+
+
+@app.post("/create/field", description="创建领域")
+def create_field(my_field: schemas.MyFieldCreate,
+                 db: Session = Depends(get_db)):
+    field = crud.create_field(db, my_field)
+    return {'id': field.id}
+
+
+@app.post('create/job', description="创建职业")
+def create_job(my_job: schemas.MyJobCreate,
+               db: Session = Depends(get_db)):
+    job = crud.create_job(db, my_job)
+    return {'id': job.id}
+
+
+@app.post("/create/course_field", description="创建课程领域")
+def create_course_field(my_course_field: schemas.MyCourseFieldCreate,
+                        db: Session = Depends(get_db)):
+    course_field = crud.create_course_field(db, my_course_field)
+    return {'id': course_field.id}
+
+
+@app.post("/create/course_job", description="创建课程职业")
+def create_course_job(my_course_job: schemas.MyCourseJobCreate,
+                      db: Session = Depends(get_db)):
+    course_job = crud.create_course_job(db, my_course_job)
+    return {'id': course_job.id}
 
 
 @app.get('/get/{obj_type}', description="获取单个对象")
@@ -67,22 +95,38 @@ def get_object(obj_type: AllObject, xid: int, db: Session = Depends(get_db)):
         return crud.get_course(db, xid)
     if obj_type == AllObject.label:
         return crud.get_label(db, xid)
+    if obj_type == AllObject.field:
+        return crud.get_field(db, xid)
+    if obj_type == AllObject.job:
+        return crud.get_job(db, xid)
+    if obj_type == AllObject.course_field:
+        return crud.get_course_field(db, xid)
+    if obj_type == AllObject.course_job:
+        return crud.get_course_job(db, xid)
     return {"message": "没有这种东西"}
 
 
 @app.get('/get/many/{obj_type}', description="获取多个对象")
 def get_many_object(
         obj_type: AllObject,
-        kip: int = 0,
+        skip: int = 0,
         limit: int = 100,
         db: Session = Depends(get_db)
 ):
     if obj_type == AllObject.file:
-        return crud.get_files(db, kip, limit)
+        return crud.get_files(db, skip, limit)
     if obj_type == AllObject.course:
-        return crud.get_courses(db, kip, limit)
+        return crud.get_courses(db, skip, limit)
     if obj_type == AllObject.label:
-        return crud.get_labels(db, kip, limit)
+        return crud.get_labels(db, skip, limit)
+    if obj_type == AllObject.field:
+        return crud.get_fields(db, skip, limit)
+    if obj_type == AllObject.job:
+        return crud.get_jobs(db, skip, limit)
+    if obj_type == AllObject.course_field:
+        return crud.get_course_fields(db, skip, limit)
+    if obj_type == AllObject.course_job:
+        return crud.get_course_jobs(db, skip, limit)
     return {"message": "没有这种东西"}
 
 
@@ -95,6 +139,14 @@ def delete_object(obj_type: AllObject, xid: int, db: Session = Depends(get_db)):
         return crud.delete_course(db, xid)
     if obj_type == AllObject.label:
         return crud.delete_label(db, xid)
+    if obj_type == AllObject.field:
+        return crud.delete_field(db, xid)
+    if obj_type == AllObject.job:
+        return crud.delete_job(db, xid)
+    if obj_type == AllObject.course_field:
+        return crud.delete_course_field(db, xid)
+    if obj_type == AllObject.course_job:
+        return crud.delete_course_job(db, xid)
     return {"message": "没有这种东西"}
 
 
@@ -106,9 +158,8 @@ async def upload_file(file: UploadFile = File(...)):
 
 @app.post("/uploadfiles/")
 async def create_upload_files(
-    files: List[UploadFile] = File(...)
+        files: List[UploadFile] = File(...)
 ):
     return {"filenames": [file.filename for file in files]}
-
 
 # ######### 第二层应用 ######## 用户

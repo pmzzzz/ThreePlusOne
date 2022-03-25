@@ -1,27 +1,28 @@
-from sqlalchemy import Boolean, Column,Integer, String
+from sqlalchemy import Boolean, Column, Integer, String, TEXT, Enum
 
 from .database import Base
 
 
 class MyFile(Base):
     __tablename__ = "files"
-    fid = Column(Integer, primary_key=True, index=True,autoincrement=True)
-    name = Column(String(128), index=True)
-    description = Column(String(128))
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    file_name = Column(String(128), index=True)
+    file_description = Column(TEXT)
     file_type = Column(String(128))
-    labels = Column(String(128))
+    file_labels = Column(String(128))
     duration = Column(Integer)
-    path = Column(String(128))
+    file_path = Column(String(128))
 
 
 class MyCourse(Base):
     __tablename__ = "courses"
-    cid = Column(Integer, primary_key=True,
-                 index=True,autoincrement=True)
-    name = Column(String(128),index=True)
-    description = Column(String(128))
-    labels = Column(String(128))
-    fields = Column(String(128))
+    id = Column(Integer, primary_key=True,
+                       index=True, autoincrement=True)
+    course_name = Column(String(128), index=True)
+    course_description = Column(String(128))
+    course_labels = Column(String(128))
+    course_fields = Column(String(128))
+    course_jobs = Column(String(128))
     duration = Column(Integer)
     content = Column(String(128))
     file_id = Column(Integer)
@@ -31,6 +32,34 @@ class MyCourse(Base):
 
 class MyLabel(Base):
     __tablename__ = "labels"
-    lid = Column(Integer, primary_key=True, index=True,autoincrement=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     label_type = Column(String(128), index=True)
-    value = Column(String(128), index=True)
+    label_value = Column(String(128), index=True)
+
+
+class MyJob(Base):
+    __tablename__ = "jobs"
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    job_name = Column(String(128), index=True)
+    job_description = Column(TEXT)
+
+
+class MyField(Base):
+    __tablename__ = "fields"
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    field_name = Column(String(128), index=True)
+    field_description = Column(TEXT)
+
+
+class MyCourseField(Base):
+    __tablename__ = "course_fields"
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    field_id = Column(Integer, index=True)
+    course_id = Column(Integer, index=True)
+
+
+class MyCourseJob(Base):
+    __tablename__ = "course_jobs"
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    job_id = Column(Integer, index=True)
+    course_id = Column(Integer, index=True)
