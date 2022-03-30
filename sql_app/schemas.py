@@ -22,7 +22,6 @@ class AllObject(str, Enum):
     course_job = "course_job"
 
 
-
 class FileType(str, Enum):
     """
     文件类型
@@ -67,8 +66,8 @@ class MyCourseCreate(BaseModel):
     course_name: str  # 不可重复
     course_description: Optional[str] = None
     course_labels: List[int] = []  # 标签id
-    course_fields: List[str] = []
-    course_jobs: List[str] = []
+    course_fields: List[int] = []
+    course_jobs: List[int] = []
     duration: Optional[int] = None
     content: List[int] = []  # 课程id
     file_id: Optional[int] = None  # 文件id
@@ -96,10 +95,6 @@ class MyLabel(MyLabelCreate):
     标签
     """
     id: Optional[int] = None
-
-
-
-
 
 
 class MyJobCreate(BaseModel):
@@ -142,3 +137,21 @@ class MyCourseJobCreate(BaseModel):
 
 class MyCourseJob(MyCourseJobCreate):
     id: int
+
+
+class FileBase(BaseModel):
+    md5: str
+    filename: str
+    owner_id: int
+    type: Optional[str]
+
+
+class FileCreate(FileBase):  # 用于向数据库提交新记录
+    pass
+
+
+class FileInfo(FileBase):  # 用于与数据库查阅结果对接
+    id: int
+
+    class Config:
+        orm_mode = True

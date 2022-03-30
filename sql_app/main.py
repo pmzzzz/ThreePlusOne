@@ -1,5 +1,6 @@
+import json
 from typing import List
-
+from . import search
 from fastapi import Depends, FastAPI, File, UploadFile, Form
 from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
@@ -21,11 +22,6 @@ templates = Jinja2Templates(directory="templates")
 app.mount('/assets', StaticFiles(directory='assets'), name='assets')
 
 
-@app.get("/")
-async def main(request: Request):
-    return templates.TemplateResponse('index.html', {'request': request})
-
-
 # Dependency
 def get_db():
     db = SessionLocal()
@@ -35,12 +31,24 @@ def get_db():
         db.close()
 
 
+@app.get("/")
+async def main(request: Request):
+    return templates.TemplateResponse('index.html', {'request': request})
+
+
+@app.get("/search")
+async def search_course(kw: str, request: Request):
+    # 进行搜索，将满足条件的id返回
+    res = search.search_course(kw)
+    return res
+
+
 @app.post('/create/file', description="创建文件")
 def create_file(my_file: schemas.MyFileCreate,
                 db: Session = Depends(get_db)
                 ):
     file = crud.create_file(db, my_file)
-    return {'id': file.fid}
+    return {'id': file.id}
 
 
 @app.post('/create/course', description="创建课程")
@@ -48,7 +56,35 @@ def create_course(my_course: schemas.MyCourseCreate,
                   db: Session = Depends(get_db)
                   ):
     course = crud.create_course(db, my_course)
+    try:
+        document = {}
+        course_id = course.id
+        description = course.course_description
+        name = course.course_name
+        jobs = json.loads(course.course_jobs)
+        fields = json.loads(course.course_fields)
+        labels = json.loads(course.course_labels)
+        content = json.loads(course.content)
+        document['course_id'] = course_id
+        document['description'] = description
+        document['name'] = name
+        if jobs:
+            jobs = ' '.join([crud.get_job(db, i).job_name for i in jobs])
+            document['jobs'] = jobs
+        if fields:
+            fields = ' '.join([crud.get_field(db, i).field_name for i in fields])
+            document['fields'] = fields
+        if labels:
+            labels = ' '.join([crud.get_label(db, i).value for i in labels])
+            document['labels'] = labels
+        if content:
+            child_name = ' '.join([crud.get_course(db, i).course_name for i in content])
+            document['child_name'] = child_name
+        search.insert_course(course_id=course_id, document=document)
+    except Exception as e:
+        print(e)
     return {'id': course.id}
+
 
 
 @app.post('/create/label', description="创建标签")
@@ -66,7 +102,7 @@ def create_field(my_field: schemas.MyFieldCreate,
     return {'id': field.id}
 
 
-@app.post('create/job', description="创建职业")
+@app.post('/create/job', description="创建职业")
 def create_job(my_job: schemas.MyJobCreate,
                db: Session = Depends(get_db)):
     job = crud.create_job(db, my_job)
@@ -162,4 +198,14 @@ async def create_upload_files(
 ):
     return {"filenames": [file.filename for file in files]}
 
+
 # ######### 第二层应用 ######## 用户
+
+@app.get("/full_course", description="获取一层课程，以及它的子课程，前端可根据子课程的id来乡下人查找，减轻后端递归的开销")
+def get_full_course(cid: int, db: Session = Depends(get_db)):
+    course = crud.get_course(db, cid)
+    content = course.content
+    content = json.loads(content)
+    content = [crud.get_course(db, i) for i in content]
+    return {"me": course, "content": content}
+

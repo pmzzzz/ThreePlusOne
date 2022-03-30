@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, Integer, String, TEXT, Enum
+from sqlalchemy import Boolean, Column, Integer, String, TEXT, Enum, ForeignKey
 
 from .database import Base
 
@@ -6,7 +6,7 @@ from .database import Base
 class MyFile(Base):
     __tablename__ = "files"
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    file_name = Column(String(128), index=True)
+    file_name = Column(String(128),unique=True, nullable=False)
     file_description = Column(TEXT)
     file_type = Column(String(128))
     file_labels = Column(String(128))
@@ -18,8 +18,8 @@ class MyCourse(Base):
     __tablename__ = "courses"
     id = Column(Integer, primary_key=True,
                        index=True, autoincrement=True)
-    course_name = Column(String(128), index=True)
-    course_description = Column(String(128))
+    course_name = Column(String(128), index=True,unique=True, nullable=False)
+    course_description = Column(TEXT)
     course_labels = Column(String(128))
     course_fields = Column(String(128))
     course_jobs = Column(String(128))
@@ -47,7 +47,7 @@ class MyJob(Base):
 class MyField(Base):
     __tablename__ = "fields"
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    field_name = Column(String(128), index=True)
+    field_name = Column(String(128),unique=True)
     field_description = Column(TEXT)
 
 
@@ -63,3 +63,13 @@ class MyCourseJob(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     job_id = Column(Integer, index=True)
     course_id = Column(Integer, index=True)
+
+
+# class FileDB(Base):
+#     __tablename__ = "physic_files"
+#
+#     id = Column(Integer, primary_key=True, index=True)
+#     filename = Column(String, nullable=False)
+#     md5 = Column(String, nullable=False)
+    # owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+#     type = Column(String)

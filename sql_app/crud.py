@@ -286,3 +286,45 @@ def delete_course_job(db: Session, id_: int):
         db.commit()
         return course_job
     return False
+
+
+
+# crud.py
+# 添加新记录
+# def create_file(db: Session, file: schemas.FileCreate):
+#     db_file = models.FileDB(**file.dict())
+#     db.add(db_file)
+#     db.commit()
+#     db.refresh(db_file)
+#     return db_file
+#
+#
+# # 查询记录，可选参数为用户id和文件类型
+# def get_files(db: Session, user_id: int = -1, filetype: str = ''):
+#     q = db.query(models.FileDB)
+#     if user_id > 0:
+#         q = q.filter(models.FileDB.owner_id == user_id)
+#     if filetype != '':
+#         q = q.filter(models.FileDB.type == filetype)
+#     return q.all()
+#
+#
+# # 查找单条记录
+# def get_file(db: Session, file_id: int):
+#     return db.query(models.FileDB).get(file_id)
+#
+#
+# # 删除一条记录
+# def drop_file(db: Session, file_id: int):
+#     db_file = db.query(models.FileDB).get(file_id)
+#     db.delete(db_file)
+#     db.commit()
+#     return db_file
+#
+#
+# from sqlalchemy import func
+#
+#
+# # 查看相同文件对应的记录数量
+# def count_num_of_same_file(db: Session, file_md5: str):
+#     return db.query(func.count(models.FileDB.id)).filter(models.FileDB.md5 == file_md5).scalar()

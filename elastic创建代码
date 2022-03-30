@@ -1,0 +1,37 @@
+DELETE /coursefull
+
+PUT /coursefull
+{
+  "mappings": {
+    "course":{
+    "properties": {
+      "course_id":{
+        "type": "integer"
+      },
+      "course_name":{
+        "type": "text",
+        "analyzer": "ik_max_word"
+      },
+      "course_description":{
+        "type": "text",
+        "analyzer": "ik_smart"
+      },
+      "course_jobs":{
+        "type": "text",
+        "analyzer": "ik_smart"
+      },
+      "course_fields":{
+        "type": "text",
+        "analyzer": "ik_max_word"
+      },
+      "course_labels":{
+        "type": "text",
+        "analyzer": "ik_max_word"
+      },
+      "child_name":{
+        "type": "text",
+        "analyzer": "ik_smart"
+      }}
+    }
+  }
+}
