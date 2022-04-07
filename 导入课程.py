@@ -48,7 +48,7 @@ def create_course(course_name, course_description,
     print(response.text)
 
 
-files = pd.read_excel('./测试文件列表.xlsx', sheet_name='课程')
+files = pd.read_excel('./测试文件列表.xlsx', sheet_name='课程').iloc[:,1:]
 
 vas = files.dropna(subset=['course_name']).fillna("---1").values
 

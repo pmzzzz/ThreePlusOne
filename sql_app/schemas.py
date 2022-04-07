@@ -20,6 +20,8 @@ class AllObject(str, Enum):
     job = "job"
     course_field = "course_field"
     course_job = "course_job"
+    course_label = "course_label"
+    file_label = "file_label"
 
 
 class FileType(str, Enum):
@@ -137,6 +139,25 @@ class MyCourseJobCreate(BaseModel):
 
 class MyCourseJob(MyCourseJobCreate):
     id: int
+
+
+
+class MyCourseLabelCreate(BaseModel):
+    course_id: int
+    label_id: int
+
+class MyCourseLabel(MyCourseLabelCreate):
+    id: int
+
+
+class MyFileLabelCreate(BaseModel):
+    file_id: int
+    label_id: int
+
+class MyFileLabel(MyFileLabelCreate):
+    id: int
+
+
 
 
 class FileBase(BaseModel):

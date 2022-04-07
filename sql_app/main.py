@@ -86,7 +86,6 @@ def create_course(my_course: schemas.MyCourseCreate,
     return {'id': course.id}
 
 
-
 @app.post('/create/label', description="创建标签")
 def create_label(my_label: schemas.MyLabelCreate,
                  db: Session = Depends(get_db)
@@ -123,8 +122,29 @@ def create_course_job(my_course_job: schemas.MyCourseJobCreate,
     return {'id': course_job.id}
 
 
+@app.post("/create/course_label", description="创建课程标签")
+def create_course_label(my_course_label: schemas.MyCourseLabelCreate,
+                        db: Session = Depends(get_db)):
+    course_label = crud.create_course_label(db, my_course_label)
+    return {'id': course_label.id}
+
+
+@app.post("/create/file_label", description="创建文件标签")
+def create_file_label(my_file_label: schemas.MyFileLabelCreate,
+                      db: Session = Depends(get_db)):
+    file_label = crud.create_file_label(db, my_file_label)
+    return {'id': file_label.id}
+
+
 @app.get('/get/{obj_type}', description="获取单个对象")
 def get_object(obj_type: AllObject, xid: int, db: Session = Depends(get_db)):
+    """
+
+    :param obj_type: 获取对象的类型
+    :param xid: 该实体的id
+    :param db: 数据库
+    :return: 一个实体
+    """
     if obj_type == AllObject.file:
         return crud.get_file(db, xid)
     if obj_type == AllObject.course:
@@ -139,6 +159,10 @@ def get_object(obj_type: AllObject, xid: int, db: Session = Depends(get_db)):
         return crud.get_course_field(db, xid)
     if obj_type == AllObject.course_job:
         return crud.get_course_job(db, xid)
+    if obj_type == AllObject.course_label:
+        return crud.get_course_label(db, xid)
+    if obj_type == AllObject.file_label:
+        return crud.get_file_label(db, xid)
     return {"message": "没有这种东西"}
 
 
@@ -163,6 +187,10 @@ def get_many_object(
         return crud.get_course_fields(db, skip, limit)
     if obj_type == AllObject.course_job:
         return crud.get_course_jobs(db, skip, limit)
+    if obj_type == AllObject.course_label:
+        return crud.get_course_labels(db, skip, limit)
+    if obj_type == AllObject.file_label:
+        return crud.get_file_labels(db, skip, limit)
     return {"message": "没有这种东西"}
 
 
@@ -183,6 +211,10 @@ def delete_object(obj_type: AllObject, xid: int, db: Session = Depends(get_db)):
         return crud.delete_course_field(db, xid)
     if obj_type == AllObject.course_job:
         return crud.delete_course_job(db, xid)
+    if obj_type == AllObject.course_label:
+        return crud.delete_course_label(db, xid)
+    if obj_type == AllObject.file_label:
+        return crud.delete_file_label(db, xid)
     return {"message": "没有这种东西"}
 
 
@@ -201,11 +233,10 @@ async def create_upload_files(
 
 # ######### 第二层应用 ######## 用户
 
-@app.get("/full_course", description="获取一层课程，以及它的子课程，前端可根据子课程的id来乡下人查找，减轻后端递归的开销")
+@app.get("/full_course", description="获取一层课程，以及它的子课程，前端可根据子课程的id来向下人查找，减轻后端递归的开销")
 def get_full_course(cid: int, db: Session = Depends(get_db)):
     course = crud.get_course(db, cid)
     content = course.content
     content = json.loads(content)
     content = [crud.get_course(db, i) for i in content]
     return {"me": course, "content": content}
-

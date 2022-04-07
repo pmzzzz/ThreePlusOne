@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from . import models, schemas
 import json
 
-from .models import MyFile, MyCourse, MyLabel, MyJob, MyCourseField, MyCourseJob, MyField
+from .models import MyFile, MyCourse, MyLabel, MyJob, MyCourseField, MyCourseJob, MyField, MyCourseLabel, MyFileLabel
 
 
 # ==============文件====================
@@ -288,6 +288,85 @@ def delete_course_job(db: Session, id_: int):
     return False
 
 
+# ==============课程标签====================
+
+def create_course_label(db: Session, my_course_tag: schemas.MyCourseLabelCreate):
+    course_id = my_course_tag.course_id
+    tag_id = my_course_tag.label_id
+    course_tag = MyCourseLabel(
+        course_id=course_id,
+        tag_id=tag_id
+    )
+    db.add(course_tag)
+    db.commit()
+    db.refresh(course_tag)
+    return course_tag
+
+
+def get_course_label(db: Session, id_: int):
+    return db.query(models.MyCourseLabel).filter(models.MyCourseLabel.id == id_).first()
+
+
+def get_course_label_by_ids(db: Session, course_id: int, label_id: int):
+    return db.query(models.MyCourseLabel).filter(models.MyCourseLabel.course_id == course_id,
+                                                 models.MyCourseLabel.label_id == label_id).first()
+
+
+def get_course_label_course(db: Session, course_id: int):
+    return db.query(models.MyCourseLabel).filter(models.MyCourseLabel.course_id == course_id).all()
+
+
+def get_course_labels(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.MyCourseLabel).offset(skip).limit(limit).all()
+
+
+def delete_course_label(db: Session, id_: int):
+    course_label = get_course_label(db, id_)
+    if course_label:
+        db.delete(course_label)
+        db.commit()
+        return course_label
+    return False
+
+
+# ==============文件标签====================
+def create_file_label(db: Session, my_file_tag: schemas.MyFileLabelCreate):
+    file_id = my_file_tag.file_id
+    label_id = my_file_tag.label_id
+    file_label = MyFileLabel(
+        file_id=file_id,
+        label_id=label_id
+    )
+    db.add(file_label)
+    db.commit()
+    db.refresh(file_label)
+    return file_label
+
+
+def get_file_label(db: Session, id_: int):
+    return db.query(models.MyFileLabel).filter(models.MyFileLabel.id == id_).first()
+
+
+def get_file_label_by_ids(db: Session, file_id: int, label_id: int):
+    return db.query(models.MyFileLabel).filter(models.MyFileLabel.file_id == file_id,
+                                               models.MyFileLabel.label_id == label_id).first()
+
+
+def get_file_label_file(db: Session, file_id: int):
+    return db.query(models.MyFileLabel).filter(models.MyFileLabel.file_id == file_id).all()
+
+
+def get_file_labels(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.MyFileLabel).offset(skip).limit(limit).all()
+
+
+def delete_file_label(db: Session, id_: int):
+    file_label = get_file_label(db, id_)
+    if file_label:
+        db.delete(file_label)
+        db.commit()
+        return file_label
+    return False
 
 # crud.py
 # 添加新记录

@@ -23,7 +23,7 @@ def create_file(file_name, file_description, file_type, file_labels, duration, f
     print(response.text)
 
 
-files = pd.read_excel('./测试文件列表.xlsx',sheet_name='文件')
+files = pd.read_excel('./测试文件列表.xlsx',sheet_name='文件').iloc[:,1:]
 
 vas = files.dropna(subset=['file_name']).fillna("---1").values
 
