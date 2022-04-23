@@ -103,11 +103,11 @@ def delete_course(db: Session, id_: int):
 # ==============标签====================
 def create_label(db: Session, my_label: schemas.MyLabelCreate):
     label_type = my_label.label_type
-    value = my_label.value
+    label_value = my_label.label_value
 
     label = MyLabel(
         label_type=label_type,
-        value=value
+        label_value=label_value
     )
     db.add(label)
     db.commit()
@@ -120,7 +120,7 @@ def get_label(db: Session, id_: int):
 
 
 def get_label_by_value(db: Session, value: str):
-    return db.query(models.MyLabel).filter(models.MyLabel.value == value).first()
+    return db.query(models.MyLabel).filter(models.MyLabel.label_value == value).first()
 
 
 def get_labels(db: Session, skip: int = 0, limit: int = 100):

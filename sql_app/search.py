@@ -2,7 +2,7 @@ from datetime import datetime
 from elasticsearch import Elasticsearch
 
 
-es = Elasticsearch("http://localhost:9200")
+es = Elasticsearch(hosts=['http://127.0.0.1:9200'])
 
 
 def insert_course(course_id, document, index="coursefull"):
@@ -21,3 +21,5 @@ def search_course(kw: str):
     })
     return res
 
+if __name__ == '__main__':
+    search_course('hh')

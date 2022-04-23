@@ -89,7 +89,7 @@ class MyLabelCreate(BaseModel):
     标签
     """
     label_type: str
-    value: str
+    label_value: str
 
 
 class MyLabel(MyLabelCreate):

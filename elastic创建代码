@@ -1,9 +1,7 @@
 DELETE /coursefull
-
-PUT /coursefull
+PUT /coursefull?include_type_name=true
+PUT /coursefull/_mapping/course?include_type_name=true
 {
-  "mappings": {
-    "course":{
     "properties": {
       "course_id":{
         "type": "integer"
@@ -32,6 +30,4 @@ PUT /coursefull
         "type": "text",
         "analyzer": "ik_smart"
       }}
-    }
-  }
 }
