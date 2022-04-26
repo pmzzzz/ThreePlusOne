@@ -141,10 +141,10 @@ class MyCourseJob(MyCourseJobCreate):
     id: int
 
 
-
 class MyCourseLabelCreate(BaseModel):
     course_id: int
     label_id: int
+
 
 class MyCourseLabel(MyCourseLabelCreate):
     id: int
@@ -154,10 +154,9 @@ class MyFileLabelCreate(BaseModel):
     file_id: int
     label_id: int
 
+
 class MyFileLabel(MyFileLabelCreate):
     id: int
-
-
 
 
 class FileBase(BaseModel):

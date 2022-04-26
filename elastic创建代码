@@ -6,6 +6,9 @@ PUT /coursefull/_mapping/course?include_type_name=true
       "course_id":{
         "type": "integer"
       },
+      "is_complete":{
+        "type": "integer"
+      },
       "course_name":{
         "type": "text",
         "analyzer": "ik_max_word"

@@ -1,4 +1,5 @@
 import json
+from copy import copy
 from typing import List
 from . import search
 from fastapi import Depends, FastAPI, File, UploadFile, Form
@@ -6,6 +7,8 @@ from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 from . import crud, models, schemas
 from .database import SessionLocal, engine
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
 from .schemas import AllObject
 
 from starlette.requests import Request
@@ -36,11 +39,44 @@ async def main(request: Request):
     return templates.TemplateResponse('index.html', {'request': request})
 
 
+# @app.get("/search")
+# async def search_course(kw: str, request: Request):
+#     # 进行搜索，将满足条件的id返回
+#     res = search.search_course(kw)
+#     return JSONResponse(res)
+
 @app.get("/search")
 async def search_course(kw: str, request: Request):
     # 进行搜索，将满足条件的id返回
     res = search.search_course(kw)
-    return res
+    return templates.TemplateResponse('搜索结果.html', {'request': request, 'res': json.dumps(res)})
+
+
+@app.get('/show/course', description="查看课程")
+def show_course(id: int, request: Request, db: Session = Depends(get_db)):
+    course = crud.get_course(db, id)
+    x = dict(course.__dict__)
+    x.pop('_sa_instance_state')
+
+    data = get_all_course(db=db, cid=id, data=[])
+    data[0]['itemStyle']['color'] = '#f6a21c'
+    data[0]['symbolSize'] = 30
+    data[0]['label']['show'] = True
+    datamap = {}
+    for i, j in enumerate(data):
+        datamap[j['id']] = i
+    links = []
+    for ii, i in enumerate(data):
+        cid = i['id']
+        course1 = crud.get_course(db, cid)
+        content = course1.content
+        content = json.loads(content)
+        for j in content:
+            links.append({'source': ii, 'target': datamap[j]})
+    print(data)
+    print(links)
+    return templates.TemplateResponse('课程简介.html', {'request': request, 'res': json.dumps(x), 'data': json.dumps(data),
+                                                    'links': json.dumps(links)})
 
 
 @app.post('/create/file', description="创建文件")
@@ -65,6 +101,7 @@ def create_course(my_course: schemas.MyCourseCreate,
         fields = json.loads(course.course_fields)
         labels = json.loads(course.course_labels)
         content = json.loads(course.content)
+        is_complete = course.is_complete
         document['course_id'] = course_id
         document['description'] = description
         document['name'] = name
@@ -80,6 +117,7 @@ def create_course(my_course: schemas.MyCourseCreate,
         if content:
             child_name = ' '.join([crud.get_course(db, i).course_name for i in content])
             document['child_name'] = child_name
+        document['is_complete'] = int(is_complete)
         search.insert_course(course_id=course_id, document=document)
     except Exception as e:
         print(e)
@@ -240,3 +278,36 @@ def get_full_course(cid: int, db: Session = Depends(get_db)):
     content = json.loads(content)
     content = [crud.get_course(db, i) for i in content]
     return {"me": course, "content": content}
+
+
+# f6a21c
+def get_all_course(cid: int, db: Session = Depends(get_db), data=None):
+    if data is None:
+        data = []
+    course = crud.get_course(db, cid)
+    content = course.content
+    content = json.loads(content)
+    data1 = {'id': course.id,
+             'name': course.course_name,
+             'symbolSize': 20,
+             'value': course.duration,
+             'itemStyle': {
+                 'color': '#13c2c2',
+                 'opacity': 0.8,
+             },
+             'label': {
+                 'show': False,
+             }
+             }
+    data.append(data1)
+    if content:
+        for i in content:
+            get_all_course(i, db, data)
+    else:
+        return data
+    return data
+
+
+if __name__ == '__main__':
+    xx = get_all_course(cid=40, data=[])
+    print(xx)

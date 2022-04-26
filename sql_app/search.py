@@ -1,7 +1,8 @@
 from datetime import datetime
 from elasticsearch import Elasticsearch
-
-
+import json
+import warnings
+warnings.filterwarnings("ignore")
 es = Elasticsearch(hosts=['http://127.0.0.1:9200'])
 
 
@@ -19,7 +20,9 @@ def search_course(kw: str):
             }
         }
     })
-    return res
+    return dict(res)
 
 if __name__ == '__main__':
-    search_course('hh')
+    r = search_course('python')
+    print(r)
+    print(r['hits']['hits'][0]['_score'])
