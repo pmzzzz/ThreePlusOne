@@ -10,9 +10,9 @@
 <p id="res" style="display: none">{{res}}</p>
 <p id="data" style="display: none">{{data}}</p>
 <p id="links" style="display: none">{{links}}</p>
+<p id="id" style="display: none">{{id}}</p>
 
 <div class="title">
-    xxx
 </div>
 
 <div class="content">
@@ -29,12 +29,13 @@
 
 <div class="info">
 <!--    点击<span style="color: #fd7e14">橙色</span>按钮开始学习-->
-    <div class="btn">
-        <button class="btn-start">开始学习</button>
-    </div>
+        <a id="start">开始学习</a>
 </div>
 
 <script >
+    const cid = document.getElementById('id').innerText
+    const start = document.getElementById('start')
+    start.href = '/study?id='+cid
     // const res = document.getElementById('res').innerText.replace(/'/g, '"');
     // const data = document.getElementById('data').innerText.replace(/'/g, '"');
     // const links = document.getElementById('links').innerText.replace(/'/g, '"');

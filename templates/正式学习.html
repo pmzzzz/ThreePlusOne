@@ -3,8 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../assets/css/正式学习.css">
 </head>
 <body>
+<p style="display: none" id="data">{{data}}</p>
+    <div class="side-bar">
+        <div class="side-bar-head">
+            <p style="font-size: 20px">学习中</p>
+        </div>
+        <div class="contents">
 
+        </div>
+    </div>
+
+<div class="content">
+    <div class="main">
+        <iframe src=""  title="学习" width="800px" height="600px"  id="bi_iframe"></iframe>
+    </div>
+</div>
+<script>
+    const xxx = document.getElementById('bi_iframe');
+    const data = document.getElementById('data').innerText.replace(/'/g, '"');
+    const data_j = JSON.parse(data);
+        const content = document.getElementsByClassName('contents')[0];
+
+    function change(url) {
+        xxx.src = url;
+    }
+    function insert_content(a) {
+        content.appendChild(a);
+    }
+    function create_a(data) {
+        let aa = document.createElement('xxxxxx');
+        aa.className = 'course-link';
+        aa.onclick = function () {
+            change(data.href);
+            clear_background()
+            var classVal = aa.getAttribute("class")
+            aa.setAttribute("class", classVal + " active")
+        };
+        aa.innerText = data.name;
+        return aa
+    }
+    for(var i = 0; i < data_j.length; i++) {
+        if (data_j[i].href){
+            insert_content(create_a(data_j[i]));
+        }
+
+    }
+
+    function clear_background() {
+        let a = document.getElementsByClassName('course-link');
+        for (var i = 0; i < a.length; i++) {
+            a[i].className = 'course-link';
+        }
+    }
+const xxxxxx = document.getElementsByClassName('course-link');
+    xxxxxx[0].click();
+</script>
 </body>
 </html>

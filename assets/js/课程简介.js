@@ -33,14 +33,15 @@ option = {
             symbolSize: 20,
             roam: false,
             force: {  //斥力因子
-                repulsion: 100,
-                edgeLength: [100, 200],
+                repulsion: 30,
+                edgeLength: [10, 50],
             },
             draggable: true,
             label: {
                 show: true
             },
-            edgeSymbol: ['', 'arrow'],
+            // edgeSymbol: ['', 'arrow'],
+            // edgeSymbol: ['', 'arrow'],
             // edgeSymbolSize: [4, 10],
             edgeLabel: {
                 fontSize: 20

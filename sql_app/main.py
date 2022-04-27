@@ -76,7 +76,14 @@ def show_course(id: int, request: Request, db: Session = Depends(get_db)):
     print(data)
     print(links)
     return templates.TemplateResponse('课程简介.html', {'request': request, 'res': json.dumps(x), 'data': json.dumps(data),
-                                                    'links': json.dumps(links)})
+                                                    'links': json.dumps(links),'id': id})
+
+
+@app.get('/study', description="学习课程")
+def study_course(id: int, request: Request, db: Session = Depends(get_db)):
+    data = get_all_course_2(db=db, cid=id, data=[])
+    print(data)
+    return templates.TemplateResponse('正式学习.html', {'request': request, 'id': id,'data': json.dumps(data)})
 
 
 @app.post('/create/file', description="创建文件")
@@ -303,6 +310,31 @@ def get_all_course(cid: int, db: Session = Depends(get_db), data=None):
     if content:
         for i in content:
             get_all_course(i, db, data)
+    else:
+        return data
+    return data
+
+
+def get_all_course_2(cid: int, db: Session = Depends(get_db), data=None):
+    if data is None:
+        data = []
+    course = crud.get_course(db, cid)
+    content = course.content
+    content = json.loads(content)
+    fid = course.file_id
+    href = ''
+    if fid:
+        file = crud.get_file(db, fid)
+        href = file.file_path
+    data1 = {'id': course.id,
+             'name': course.course_name,
+             'href': href,
+             'description': course.course_description
+             }
+    data.append(data1)
+    if content:
+        for i in content:
+            get_all_course_2(i, db, data)
     else:
         return data
     return data

@@ -1,0 +1,36 @@
+anyio @ file:///Users/runner/miniforge3/conda-bld/anyio_1641898117881/work/dist
+asgiref==3.5.0
+certifi==2021.10.8
+cffi==1.15.0
+charset-normalizer==2.0.12
+click==8.0.4
+cryptography==36.0.2
+docopt==0.6.2
+elastic-transport==8.1.0
+elasticsearch==8.1.2
+et-xmlfile==1.1.0
+fastapi @ file:///home/conda/feedstock_root/build_artifacts/fastapi_1646447241602/work
+greenlet @ file:///Users/runner/miniforge3/conda-bld/greenlet_1635837112391/work
+h11==0.13.0
+idna @ file:///home/conda/feedstock_root/build_artifacts/idna_1642433548627/work
+Jinja2==3.1.0
+MarkupSafe==2.1.1
+numpy @ file:///Users/runner/miniforge3/conda-bld/numpy_1646717493174/work
+openpyxl==3.0.9
+pandas==1.4.1
+pipreqs==0.4.11
+pycparser==2.21
+pydantic @ file:///Users/runner/miniforge3/conda-bld/pydantic_1641053131605/work
+PyMySQL==1.0.2
+python-dateutil @ file:///home/conda/feedstock_root/build_artifacts/python-dateutil_1626286286081/work
+python-multipart==0.0.5
+pytz @ file:///home/conda/feedstock_root/build_artifacts/pytz_1647961439546/work
+requests==2.27.1
+six @ file:///home/conda/feedstock_root/build_artifacts/six_1620240208055/work
+sniffio @ file:///Users/runner/miniforge3/conda-bld/sniffio_1635844942189/work
+SQLAlchemy @ file:///Users/runner/miniforge3/conda-bld/sqlalchemy_1646615332152/work
+starlette @ file:///home/conda/feedstock_root/build_artifacts/starlette-recipe_1641778727195/work
+typing_extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1644850595256/work
+urllib3==1.26.9
+uvicorn==0.17.6
+yarg==0.1.9
